@@ -28,7 +28,7 @@ function App() {
               View Projects
             </a>
             <a
-              href="your-resume-link.pdf"
+              href="Akash CV.pdf"
               class="btn secondary"
               target="_blank"
               rel="noreferrer"
