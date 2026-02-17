@@ -108,4 +108,4 @@ Feel free to reach out if you have any questions or suggestions!
 
 ---
 
-Built with ❤️ by Akash Verma
+Built with ❤️ by Akash V
