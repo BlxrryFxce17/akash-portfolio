@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 import "./App.css";
 import "./saas.css";
 import Certifications from "./components/Certifications";
@@ -598,6 +606,14 @@ const TimelineItem = ({ year, title, company, align, hoverImage }) => {
 
 
 const GitHubStats = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <section className="section stats-section" style={{ padding: '4rem 0' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>GitHub <span className="text-gradient">Activity</span></h2>
@@ -612,10 +628,10 @@ const GitHubStats = () => {
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.05)',
           borderRadius: '16px',
-          padding: '2rem',
+          padding: isMobile ? '1.5rem 1rem' : '2rem',
           maxWidth: '1000px',
           width: '100%',
-          overflowX: 'auto',
+          overflow: 'hidden',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
           margin: '0 auto'
         }}>
@@ -625,7 +641,16 @@ const GitHubStats = () => {
             theme={{
               dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
             }}
-            style={{ margin: '0 auto' }}
+            blockSize={isMobile ? 8 : 12}
+            blockMargin={isMobile ? 2 : 4}
+            fontSize={isMobile ? 10 : 14}
+            hideColorLegend={isMobile}
+            transformData={isMobile ? (data) => {
+              const now = new Date();
+              const cutoff = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+              return data.filter(d => new Date(d.date) >= cutoff);
+            } : undefined}
+            style={{ margin: '0 auto', width: '100%' }}
             renderBlock={(block, activity) => {
               const dateObj = new Date(activity.date);
               const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -658,6 +683,7 @@ const GitHubStats = () => {
     </section>
   );
 };
+
 
 // Animation variants
 const containerVariants = {
@@ -861,7 +887,7 @@ const Home = () => {
 
       <Toolbox />
 
-      <section className="section bg-accent-1" id="about" style={{ padding: '8rem 0' }}>
+      <section className="section bg-accent-1" id="about" style={{ padding: '8rem 5%' }}>
         <ScrollRevealText text="I'm a Computer Science student based in India, focused on full-stack development, machine learning, and AI projects. I enjoy building real-world apps and solving problems with code." />
       </section>
 
@@ -1241,10 +1267,24 @@ function App() {
   });
   // Secret Console Easter Egg
   useEffect(() => {
+    if (window.__easterEggPrinted) return;
+    window.__easterEggPrinted = true;
+
     console.log(
-      "%cWelcome to the dark side of the web, choom.\n%cIf you're reading this, we should probably build something together.\nDrop me a line: akashvmsn@gmail.com", 
-      "color: #00f0ff; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #00f0ff;", 
-      "color: #a1a1aa; font-size: 14px;"
+      "%c>> INITIATING NEURAL HANDSHAKE...\n" +
+      "%c========================================\n" +
+      "          A  K  A  S  H   V.\n" +
+      "========================================\n" +
+      "%c[+] SYSTEM BREACH DETECTED.\n" +
+      "[+] Welcome to the dark side of the web, choom.\n" +
+      "[+] Looks like you enjoy poking around under the hood.\n\n" +
+      "%c>> Let's build something preem together.\n" +
+      ">> Ping me: %cakashvmsn@gmail.com", 
+      "color: #a1a1aa; font-size: 12px;",
+      "color: #00f0ff; font-weight: bold; text-shadow: 0 0 5px #00f0ff;",
+      "color: #ff003c; font-size: 14px; font-weight: bold;",
+      "color: #a1a1aa; font-size: 14px;",
+      "color: #ff00ea; font-size: 14px; font-weight: bold; text-decoration: underline;"
     );
   }, []);
 
@@ -1292,13 +1332,7 @@ function App() {
 
   return (
     <Router>
-      <div className="mobile-not-supported">
-        <div className="mobile-not-supported-content">
-          <h2>Desktop Recommended</h2>
-          <p>The mobile version of this portfolio is currently under construction.</p>
-          <p>Please visit on a desktop or laptop for the full experience.</p>
-        </div>
-      </div>
+      <ScrollToTop />
       <CustomCursor />
       <OverlayMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       {isLoading && <SplashScreen setIsLoading={setIsLoading} />}
