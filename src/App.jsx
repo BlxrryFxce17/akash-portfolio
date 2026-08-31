@@ -108,6 +108,7 @@ const CustomCursor = () => {
   return (
     <>
       <motion.div
+        className="cursor-glow"
         style={{
           position: 'fixed',
           top: 0, left: 0,
@@ -913,8 +914,8 @@ const Home = () => {
       <Certifications />
 
       {/* Landing Page Contact Section */}
-      <section className="section bg-accent-4" style={{ padding: '4rem 0 6rem 0', textAlign: 'center' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Interested in <span className="text-gradient">collaborating?</span></h2>
+      <section className="section bg-accent-4" style={{ padding: '4rem 5% 6rem 5%', textAlign: 'center', width: '100%', overflow: 'hidden' }}>
+        <h2 style={{ marginBottom: '1rem', whiteSpace: 'normal', wordWrap: 'break-word' }}>Interested in <span className="text-gradient">collaborating?</span></h2>
         <p style={{ color: '#a1a1aa', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem auto' }}>
           I'm always open to discussing product design work or partnership opportunities.
         </p>
@@ -1291,6 +1292,13 @@ function App() {
 
   return (
     <Router>
+      <div className="mobile-not-supported">
+        <div className="mobile-not-supported-content">
+          <h2>Desktop Recommended</h2>
+          <p>The mobile version of this portfolio is currently under construction.</p>
+          <p>Please visit on a desktop or laptop for the full experience.</p>
+        </div>
+      </div>
       <CustomCursor />
       <OverlayMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       {isLoading && <SplashScreen setIsLoading={setIsLoading} />}
