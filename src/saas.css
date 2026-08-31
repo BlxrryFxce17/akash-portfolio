@@ -35,10 +35,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 5%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background: transparent;
     z-index: 1000;
 }
 .saas-logo a {
@@ -436,15 +433,17 @@ h1, h2, h3, h4, h5, h6 {
    SECTION BACKGROUND FIX
 ======================== */
 .section {
-    background: transparent !important;
+    position: relative;
 }
 
-.experience-section,
-.toolbox-section,
-.stats-section,
-.horizontal-scroll-section {
-    background: transparent !important;
+.section:not(.hero) {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+.bg-accent-1 { background-color: rgba(139, 92, 246, 0.02); }
+.bg-accent-2 { background-color: rgba(57, 211, 83, 0.02); }
+.bg-accent-3 { background-color: rgba(6, 182, 212, 0.02); }
+.bg-accent-4 { background-color: rgba(244, 63, 94, 0.02); }
 
 /* Kill any old marquee edge gradients that reference non-black colors */
 .marquee-wrapper::before {
@@ -477,8 +476,8 @@ body.light-mode .hero-expanding-text {
     color: #6b7280;
 }
 body.light-mode .saas-navbar {
-    background: rgba(250, 250, 250, 0.8);
-    border-bottom-color: rgba(0, 0, 0, 0.06);
+    background: transparent;
+    border-bottom-color: transparent;
 }
 body.light-mode .saas-logo a {
     color: #111827;
@@ -503,14 +502,6 @@ body.light-mode .nav-btn-menu {
 }
 body.light-mode .nav-btn-menu:hover {
     background: #1f2937;
-}
-body.light-mode .hero-portrait-card {
-    background: linear-gradient(145deg, #f0f0f0, #e5e5e5);
-    border-color: rgba(0, 0, 0, 0.06);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
-}
-body.light-mode .circle {
-    border-color: rgba(0, 0, 0, 0.06);
 }
 body.light-mode .btn-pill-primary {
     background: #111827;
@@ -576,12 +567,17 @@ body.light-mode .toolbox-title {
 body.light-mode .toolbox-subtitle {
     color: #6b7280;
 }
-body.light-mode .marquee-item {
-    color: #6b7280;
+
+body.light-mode .timeline-content {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
-body.light-mode .timeline-card {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 0, 0, 0.06);
+body.light-mode .timeline-content h3 {
+    color: #111827;
+}
+body.light-mode .timeline-content p {
+    color: #4b5563;
 }
 body.light-mode .timeline-dot {
     background: #111827;
@@ -873,5 +869,199 @@ body.light-mode .overlay-menu-right {
         border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         padding-top: 3rem;
+    }
+}
+
+.hero-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+.hero-social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e4e4e7;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.hero-social-links a:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-3px);
+}
+body.light-mode .hero-social-links {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ==================================
+   LIGHT MODE AESTHETIC OVERRIDES
+================================== */
+body.light-mode {
+    --shape-color: 0, 0, 0;
+}
+
+body.light-mode .hero-floating-badge {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: #111827;
+}
+
+body.light-mode .tech-pill-marquee {
+    background: rgba(255, 255, 255, 0.9);
+    color: #111827;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+body.light-mode .tech-pill-marquee:hover {
+    border-color: var(--hot-pink);
+    box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
+}
+
+body.light-mode .project-card {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .project-card h3 {
+    color: #111827 !important;
+}
+
+body.light-mode .project-card p {
+    color: #4b5563 !important;
+}
+
+body.light-mode .project-tech span,
+body.light-mode .tech-badge {
+    background: #f3f4f6;
+    color: #111827;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .github-link {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: #111827 !important;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+body.light-mode .github-link:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .hero-floating-badge strong {
+    color: #111827;
+}
+
+body.light-mode .btn-pill.light {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #111827;
+}
+
+body.light-mode .btn-pill.light:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #111827;
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .github-calendar-container {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+}
+body.light-mode .github-calendar-container * {
+    color: #e5e7eb;
+}
+
+body.light-mode .text-neon-green { color: #16a34a; }
+body.light-mode .text-electric-blue { color: #0284c7; }
+body.light-mode .text-bright-yellow { color: #d97706; }
+body.light-mode .text-vivid-orange { color: #ea580c; }
+body.light-mode .text-hot-pink { color: #db2777; }
+
+body.light-mode .contact-pill {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    color: #111827 !important;
+}
+
+body.light-mode .contact-pill:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-color: var(--electric-blue) !important;
+}
+body.light-mode .hero-social-links a {
+    background: rgba(0, 0, 0, 0.05);
+    color: #111827;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+body.light-mode .hero-social-links a:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* ========================
+   MOBILE RESPONSIVENESS (< 768px)
+======================== */
+@media (max-width: 768px) {
+    .split-title {
+        font-size: 2.5rem !important;
+    }
+    .hero-portrait-card {
+        width: 100%;
+        max-width: 320px;
+        height: 380px;
+    }
+    .hero-tagline {
+        font-size: 1rem;
+    }
+    .saas-navbar {
+        padding: 1rem 5%;
+    }
+    .saas-nav-actions {
+        gap: 0.5rem;
+    }
+    .nav-btn-resume {
+        padding: 0.5rem;
+        font-size: 0; /* Hide text, keep icon */
+    }
+    .nav-btn-resume svg {
+        margin: 0;
+    }
+    
+    .overlay-nav-links a {
+        font-size: 3rem;
+    }
+}
+
+/* ========================
+   ULTRA MOBILE (< 480px)
+======================== */
+@media (max-width: 480px) {
+    .split-title {
+        font-size: 2.1rem !important;
+    }
+    .hero-portrait-card {
+        height: 340px;
+        max-width: 280px;
+    }
+    .hero-split-container {
+        padding-top: 5rem;
+    }
+    .overlay-nav-links a {
+        font-size: 2.25rem;
     }
 }

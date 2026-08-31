@@ -1897,12 +1897,17 @@ nav a:hover {
 /* ========================================= */
 
 /* Expand max widths */
-.section, .container, .projects-tabs-container {
+.container, .projects-tabs-container {
     max-width: 1400px !important;
     width: 100% !important;
     margin: 0 auto;
     padding-left: 2%;
     padding-right: 2%;
+}
+
+.section {
+    max-width: 100% !important;
+    width: 100% !important;
 }
 
 .hero-text {

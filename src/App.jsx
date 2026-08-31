@@ -34,7 +34,7 @@ const CustomCursor = () => {
 
     const handleMouseOver = (e) => {
       const interactable = e.target.closest('a, button, input, select, textarea, .btn, [role="button"]');
-      const projectCard = e.target.closest('[data-cursor="project"], .projects-tab-content');
+      const projectCard = e.target.closest('[data-cursor="project"]');
       const githubLink = e.target.closest('[data-cursor="github"], .react-activity-calendar__calendar rect');
       const textNode = e.target.closest('h1, h2, h3, h4, p, span, [data-cursor="text"], .splash-logo');
       const isMagnetic = e.target.closest('a, button, .btn');
@@ -107,6 +107,25 @@ const CustomCursor = () => {
 
   return (
     <>
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0, left: 0,
+          width: '800px',
+          height: '800px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 65%)',
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
+          zIndex: -1,
+        }}
+        animate={{
+          x: mousePosition.x - 400,
+          y: mousePosition.y - 400,
+          opacity: isVisible ? 1 : 0
+        }}
+        transition={{ type: "tween", duration: 1, ease: "easeOut" }}
+      />
       <motion.div
         className="cursor-dot"
         animate={{
@@ -215,7 +234,7 @@ const PROJECT_DATA = [
     description: "A React Native recipe app to search meals, view ingredients, and save favourites with Firebase auth.",
     tech: ["React Native", "TypeScript", "Firebase"],
     link: "https://github.com/BlxrryFxce17/MealQuest",
-    images: ["/grammar_placeholder.jpg"]
+    images: ["https://placehold.co/800x450/0f172a/fff?text=MealQuest"]
   },
   {
     title: "FilmFolks",
@@ -223,21 +242,21 @@ const PROJECT_DATA = [
     tech: ["React", "Node.js", "MongoDB"],
     link: "https://github.com/BlxrryFxce17/FilmFolks",
     liveLink: "https://filmfolks-client.vercel.app",
-    images: ["/filmfolks_placeholder.jpg"]
+    images: ["https://placehold.co/800x450/0f172a/fff?text=FilmFolks"]
   },
   {
     title: "AirCanvas",
     description: "A computer vision application allowing users to draw in thin air using hand tracking gestures.",
     tech: ["Python", "OpenCV"],
     link: "https://github.com/BlxrryFxce17/AirCanvas",
-    images: ["/fakenews_placeholder.jpg"]
+    images: ["https://placehold.co/800x450/0f172a/fff?text=AirCanvas"]
   },
   {
     title: "AI Grammar Corrector",
     description: "A web app that uses NLP models to detect and correct grammar mistakes in user text.",
     tech: ["Python", "NLP", "Hugging Face"],
     link: "https://github.com/BlxrryFxce17/AI-Grammar-Corrector",
-    images: ["/grammar_placeholder.jpg"]
+    images: ["https://placehold.co/800x450/0f172a/fff?text=AI+Grammar+Corrector"]
   }
 ];
 
@@ -306,10 +325,10 @@ const ProjectsTabs = () => {
               transition={{ duration: 0.3 }}
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
             >
-              <div className="tab-slideshow">
+              <div className="tab-slideshow" data-cursor="project">
                 <ProjectSlideshow images={activeProject.images} title={activeProject.title} />
               </div>
-              <div className="tab-details" data-cursor="project">
+              <div className="tab-details">
                 <h3>{activeProject.title}</h3>
                 <p>{activeProject.description}</p>
                 <div className="tech-stack">
@@ -443,9 +462,9 @@ const Toolbox = () => {
   const bottomMarqueeItems = [...bottomRowTech, ...bottomRowTech, ...bottomRowTech];
 
   return (
-    <section className="section toolbox-section" id="skills" style={{ padding: '6rem 0', overflow: 'hidden' }}>
+    <section className="section toolbox-section bg-accent-4" id="skills" style={{ padding: '6rem 0', overflow: 'hidden' }}>
       <div className="toolbox-header" style={{ marginBottom: '3rem', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '700', color: '#fff', margin: 0 }}>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '700', margin: 0 }}>
           Skills & Technologies
         </h2>
       </div>
@@ -582,12 +601,12 @@ const GitHubStats = () => {
     <section className="section stats-section" style={{ padding: '4rem 0' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>GitHub <span className="text-gradient">Activity</span></h2>
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        className="github-calendar-container"
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '0 1rem' }}
-      >
-        <div style={{
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+        style={{ 
           background: 'rgba(15, 23, 42, 0.4)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -596,7 +615,8 @@ const GitHubStats = () => {
           maxWidth: '1000px',
           width: '100%',
           overflowX: 'auto',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)'
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+          margin: '0 auto'
         }}>
           <GitHubCalendar 
             username="BlxrryFxce17" 
@@ -633,7 +653,6 @@ const GitHubStats = () => {
               }
             }}
           />
-        </div>
       </motion.div>
     </section>
   );
@@ -744,6 +763,17 @@ const GlitchText = ({ original, as: Component = "span", className = "", style = 
 // --- PAGES ---
 
 const Home = () => {
+  const timelineRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"]
+  });
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
     <>
       <section className="section hero" id="home" style={{ perspective: "1000px" }}>
@@ -795,13 +825,33 @@ const Home = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
             >
-              <div className="hero-portrait-card">
-                <div className="portrait-circles">
-                  <div className="circle c1"></div>
-                  <div className="circle c2"></div>
-                  <div className="circle c3"></div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div className="hero-portrait-card">
+                  <div className="portrait-circles">
+                    <div className="circle c1"></div>
+                    <div className="circle c2"></div>
+                    <div className="circle c3"></div>
+                  </div>
+                  <img src="/portrait.jpg" alt="Akash V Portrait" className="portrait-img" />
                 </div>
-                <img src="/portrait.jpg" alt="Akash V Portrait" className="portrait-img" />
+
+                <div className="hero-social-links">
+                  <a href="https://github.com/BlxrryFxce17" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.113.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" /></svg>
+                  </a>
+                  <a href="https://www.linkedin.com/in/akashv10" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  </a>
+                  <a href="https://x.com/kai_zenn10" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="X (Twitter)">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  </a>
+                  <a href="https://www.instagram.com/kai.zenn_10/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                  </a>
+                  <a href="https://www.reddit.com/user/Blxrry_Fxce_17/" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="Reddit">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .466c.842.842 2.484.915 2.961.915.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 0-.466.336.336 0 0 0-.466 0c-.326.311-1.305.719-2.495.719-1.114 0-2.12-.352-2.496-.715a.333.333 0 0 0-.234-.1z"/></svg>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -810,10 +860,33 @@ const Home = () => {
 
       <Toolbox />
 
-      <section className="section" id="about" style={{ padding: '8rem 0' }}>
+      <section className="section bg-accent-1" id="about" style={{ padding: '8rem 0' }}>
         <ScrollRevealText text="I'm a Computer Science student based in India, focused on full-stack development, machine learning, and AI projects. I enjoy building real-world apps and solving problems with code." />
       </section>
-      <section className="section" style={{ paddingBottom: '2rem' }}>
+
+      {/* Experience & Education Section */}
+      <section className="section experience-section bg-accent-2" id="experience" style={{ paddingBottom: '6rem', position: 'relative', overflow: 'hidden' }}>
+        <FloatingShapes />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <GlitchText original="Experience & Education" as="h2" type="scramble" style={{ marginBottom: '4rem', textAlign: 'center' }} />
+          <div className="timeline-container" ref={timelineRef}>
+            <div className="timeline-line">
+              <motion.div style={{ scaleY, originY: 0, backgroundColor: 'var(--neon-green)', width: '100%', height: '100%', borderRadius: '4px' }} />
+            </div>
+            <TimelineItem
+              year="Jan 2026 - Jun 2026"
+              title="Full Stack Developer Intern"
+              company="Techpath"
+              align="left"
+              hoverImage="/certifications/TechPath.png"
+            />
+            <TimelineItem year="2024 - 2026" title="Master of Computer Applications (MCA)" company="St. Aloysius (Deemed to be University)" align="right" />
+            <TimelineItem year="2021 - 2024" title="Bachelor of Computer Applications (BCA)" company="Srinivas University" align="left" />
+          </div>
+        </div>
+      </section>
+
+      <section className="section bg-accent-3" style={{ paddingBottom: '2rem' }}>
         <h2 style={{ marginBottom: '2rem', textAlign: 'center' }}>Featured <span className="text-gradient">Projects</span></h2>
         <div className="projects-grid">
           {PROJECT_DATA.filter(p => p.title === "AirCanvas" || p.title === "AI Job Finder").map((project, index) => (
@@ -840,7 +913,7 @@ const Home = () => {
       <Certifications />
 
       {/* Landing Page Contact Section */}
-      <section className="section" style={{ padding: '4rem 0 6rem 0', textAlign: 'center' }}>
+      <section className="section bg-accent-4" style={{ padding: '4rem 0 6rem 0', textAlign: 'center' }}>
         <h2 style={{ marginBottom: '1rem' }}>Interested in <span className="text-gradient">collaborating?</span></h2>
         <p style={{ color: '#a1a1aa', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem auto' }}>
           I'm always open to discussing product design work or partnership opportunities.
@@ -902,7 +975,7 @@ const ProjectsPage = () => {
 
 const ContactPage = () => {
   return (
-    <section className="section contact-section" id="contact" style={{ paddingTop: '10rem', minHeight: '80vh' }}>
+    <section className="section contact-section bg-accent-1" id="contact" style={{ paddingTop: '10rem', minHeight: '80vh' }}>
       <div className="contact-container">
         <div className="contact-content">
           <GlitchText original="Let's Build Something Together." as="h2" type="cssOnly" />
@@ -912,7 +985,13 @@ const ContactPage = () => {
           <div className="contact-methods" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
             <a href="mailto:akashvmsn@gmail.com" className="contact-pill">akashvmsn@gmail.com</a>
             <a href="https://wa.me/918904819430" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>+91 89048 19430</a>
-            <a href="https://github.com/BlxrryFxce17" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>GitHub</a>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a href="https://github.com/BlxrryFxce17" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>GitHub</a>
+              <a href="https://www.linkedin.com/in/akashv10" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>LinkedIn</a>
+              <a href="https://x.com/kai_zenn10" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>X (Twitter)</a>
+              <a href="https://www.instagram.com/kai.zenn_10/" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>Instagram</a>
+              <a href="https://www.reddit.com/user/Blxrry_Fxce_17/" target="_blank" rel="noopener noreferrer" className="contact-pill" style={{ background: 'rgba(255,255,255,0.05)' }}>Reddit</a>
+            </div>
           </div>
         </div>
       </div>
@@ -972,11 +1051,181 @@ const OverlayMenu = ({ isOpen, onClose }) => {
   );
 };
 
+const FloatingShapes = () => {
+  const containerRef = React.useRef(null);
+  const shapesData = React.useRef([]);
+  const shapeRefs = React.useRef([]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+    let width = container.clientWidth;
+    let height = container.clientHeight;
+
+    // Initialize shapes once
+    if (shapesData.current.length === 0) {
+      shapesData.current = Array.from({ length: 35 }).map(() => {
+        const typeRand = Math.random();
+        let type = 'circle';
+        if (typeRand > 0.85) type = 'cross';
+        else if (typeRand > 0.7) type = 'hollow';
+        else if (typeRand > 0.55) type = 'square';
+        else if (typeRand > 0.4) type = 'triangle';
+        else if (typeRand > 0.25) type = 'dot';
+        
+        const size = Math.random() * 80 + 20;
+        return {
+          type,
+          size,
+          radius: size / 2,
+          x: Math.random() * (width - size),
+          y: Math.random() * (height - size),
+          vx: (Math.random() - 0.5) * 0.4, // Slower initial speed
+          vy: (Math.random() - 0.5) * 0.4,
+          vRot: (Math.random() - 0.5) * 0.4, // Slower rotation
+          rotation: Math.random() * 360,
+          opacity: Math.random() * 0.15 + 0.1,
+        };
+      });
+    }
+
+    let animationFrameId;
+
+    const update = () => {
+      width = container.clientWidth;
+      height = container.clientHeight;
+
+      for (let i = 0; i < shapesData.current.length; i++) {
+        let s1 = shapesData.current[i];
+
+        // Wall collision (gentle bounce)
+        if (s1.x <= 0) { s1.x = 0; s1.vx *= -1; }
+        if (s1.x + s1.size >= width) { s1.x = width - s1.size; s1.vx *= -1; }
+        if (s1.y <= 0) { s1.y = 0; s1.vy *= -1; }
+        if (s1.y + s1.size >= height) { s1.y = height - s1.size; s1.vy *= -1; }
+
+        // Object collision
+        for (let j = i + 1; j < shapesData.current.length; j++) {
+          let s2 = shapesData.current[j];
+          let dx = (s2.x + s2.radius) - (s1.x + s1.radius);
+          let dy = (s2.y + s2.radius) - (s1.y + s1.radius);
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          let minDist = s1.radius + s2.radius;
+          
+          if (distance < minDist && distance > 0.1) {
+            // Gentle push apart
+            let overlap = minDist - distance;
+            let nx = dx / distance;
+            let ny = dy / distance;
+            
+            // Reduced repulsion force for calmer movement
+            let pushX = nx * (overlap * 0.01);
+            let pushY = ny * (overlap * 0.01);
+            
+            s1.vx -= pushX;
+            s1.vy -= pushY;
+            s2.vx += pushX;
+            s2.vy += pushY;
+          }
+        }
+
+        // Speed limit (very slow max speed)
+        let speed = Math.sqrt(s1.vx * s1.vx + s1.vy * s1.vy);
+        const maxSpeed = 0.4;
+        if (speed > maxSpeed) {
+          s1.vx = (s1.vx / speed) * maxSpeed;
+          s1.vy = (s1.vy / speed) * maxSpeed;
+        }
+
+        // Add tiny minimum speed to prevent them from stopping completely
+        if (speed < 0.05) {
+          s1.vx += (Math.random() - 0.5) * 0.01;
+          s1.vy += (Math.random() - 0.5) * 0.01;
+        }
+
+        s1.x += s1.vx;
+        s1.y += s1.vy;
+        s1.rotation += s1.vRot;
+      }
+
+      // Render
+      shapeRefs.current.forEach((el, i) => {
+        if (el && shapesData.current[i]) {
+          const s = shapesData.current[i];
+          el.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.rotation}deg)`;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(update);
+    };
+
+    update();
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  return (
+    <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {shapesData.current.map((s, i) => {
+        let content = null;
+        if (s.type === 'circle') {
+          content = <div style={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity})` }} />;
+        } else if (s.type === 'hollow') {
+          content = <div style={{ width: '100%', height: '100%', borderRadius: '50%', border: `1px solid rgba(var(--shape-color, 255, 255, 255), ${s.opacity * 2})` }} />;
+        } else if (s.type === 'square') {
+          content = <div style={{ width: '100%', height: '100%', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity})` }} />;
+        } else if (s.type === 'triangle') {
+          content = (
+            <div style={{ 
+              width: 0, height: 0, 
+              borderLeft: `${s.size/2}px solid transparent`,
+              borderRight: `${s.size/2}px solid transparent`,
+              borderBottom: `${s.size}px solid rgba(var(--shape-color, 255, 255, 255), ${s.opacity})` 
+            }} />
+          );
+        } else if (s.type === 'dot') {
+          content = <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity * 3})`, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />;
+        } else {
+          content = (
+            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '50%', left: '20%', right: '20%', height: '1px', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity * 3})` }} />
+              <div style={{ position: 'absolute', left: '50%', top: '20%', bottom: '20%', width: '1px', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity * 3})` }} />
+            </div>
+          );
+        }
+
+        return (
+          <div
+            key={i}
+            ref={(el) => shapeRefs.current[i] = el}
+            style={{
+              position: 'absolute',
+              width: s.type === 'triangle' || s.type === 'dot' ? 'auto' : s.size,
+              height: s.type === 'triangle' || s.type === 'dot' ? 'auto' : s.size,
+              top: 0, left: 0, // Using translate for positioning
+              willChange: 'transform'
+            }}
+          >
+            {content}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [overdriveCount, setOverdriveCount] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
+  }, [isDarkMode]);
 
   const { scrollY, scrollYProgress } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -1088,6 +1337,11 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
 
+          <div style={{ display: 'flex', width: '100%', height: '6px' }}>
+            {['#7c3aed', '#ec4899', '#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#6366f1', '#4c1d95'].map((color, index) => (
+              <div key={index} style={{ flex: 1, backgroundColor: color }} />
+            ))}
+          </div>
           {/* Footer */}
           <footer className="footer">
             <p onClick={() => setOverdriveCount(c => c + 1)} style={{ cursor: 'pointer', userSelect: 'none' }}>
