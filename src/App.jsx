@@ -41,13 +41,25 @@ const CustomCursor = () => {
     };
 
     const handleMouseOver = (e) => {
+      const coinTarget = e.target.closest('.coin-mech, .tok, .refill-btn');
+      const arcadeBtn = e.target.closest('.cab-btn, .deck-stick, .refill-btn');
+      const arcadeScreen = e.target.closest('.mon-stage, .cert-card, .cl-row, .modal-box');
+      const arcadeSection = e.target.closest('#certifications, .certifications-section');
       const interactable = e.target.closest('a, button, input, select, textarea, .btn, [role="button"]');
       const projectCard = e.target.closest('[data-cursor="project"]');
       const githubLink = e.target.closest('[data-cursor="github"], .react-activity-calendar__calendar rect');
       const textNode = e.target.closest('h1, h2, h3, h4, p, span, [data-cursor="text"], .splash-logo');
       const isMagnetic = e.target.closest('a, button, .btn');
 
-      if (githubLink) {
+      if (coinTarget) {
+        setHoverType('arcade-coin');
+      } else if (arcadeBtn) {
+        setHoverType('arcade-btn');
+      } else if (arcadeScreen) {
+        setHoverType('arcade-screen');
+      } else if (arcadeSection) {
+        setHoverType('arcade');
+      } else if (githubLink) {
         setHoverType('github');
       } else if (projectCard) {
         setHoverType('project');
@@ -92,6 +104,8 @@ const CustomCursor = () => {
     targetY = mousePosition.y + (centerY - mousePosition.y) * 0.15;
   }
 
+  const isArcade = ['arcade', 'arcade-btn', 'arcade-screen', 'arcade-coin'].includes(hoverType);
+
   const getRingSize = () => {
     switch (hoverType) {
       case 'github': return 16;
@@ -123,7 +137,9 @@ const CustomCursor = () => {
           width: '800px',
           height: '800px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 65%)',
+          background: isArcade
+            ? 'radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(245, 158, 11, 0.1) 40%, transparent 65%)'
+            : 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 65%)',
           mixBlendMode: 'screen',
           pointerEvents: 'none',
           zIndex: -1,
@@ -135,13 +151,14 @@ const CustomCursor = () => {
         }}
         transition={{ type: "tween", duration: 1, ease: "easeOut" }}
       />
+      {/* Normal Cursor Elements (Hidden in Arcade Section) */}
       <motion.div
         className="cursor-dot"
         animate={{
           x: targetX - 5,
           y: targetY - 5,
-          opacity: isVisible ? (hoverType !== 'default' ? 0 : 1) : 0,
-          scale: hoverType !== 'default' ? 0 : 1,
+          opacity: isVisible && !isArcade ? (hoverType !== 'default' ? 0 : 1) : 0,
+          scale: hoverType !== 'default' || isArcade ? 0 : 1,
           mixBlendMode: 'difference'
         }}
         transition={{ type: "tween", duration: 0.15, ease: "linear" }}
@@ -156,7 +173,7 @@ const CustomCursor = () => {
           backgroundColor: hoverType === 'project' ? 'rgba(255, 255, 255, 0.1)' : (hoverType === 'link' || hoverType === 'text' ? '#ffffff' : 'transparent'),
           borderColor: hoverType === 'link' || hoverType === 'text' ? 'transparent' : getRingColor(),
           backdropFilter: hoverType === 'project' ? 'blur(4px)' : 'none',
-          opacity: isVisible ? 1 : 0,
+          opacity: isVisible && !isArcade ? 1 : 0,
           mixBlendMode: (hoverType === 'default' || hoverType === 'link' || hoverType === 'text') ? 'difference' : 'normal'
         }}
         transition={{ type: "spring", stiffness: 300, damping: 25, mass: 0.5 }}
@@ -175,6 +192,69 @@ const CustomCursor = () => {
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Sleek Retro Arcade Cursor */}
+      <AnimatePresence>
+        {isVisible && isArcade && (
+          <motion.div
+            className="retro-cursor"
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{
+              x: mousePosition.x - (hoverType === 'arcade' ? 2 : 12),
+              y: mousePosition.y - (hoverType === 'arcade' ? 2 : 12),
+              opacity: 1,
+              scale: hoverType !== 'arcade' ? 1.15 : 1,
+            }}
+            exit={{ opacity: 0, scale: 0.7 }}
+            transition={{ type: "tween", duration: 0.04, ease: "linear" }}
+          >
+            {hoverType === 'arcade' ? (
+              /* Sleek 8-bit Pixel Arrow Pointer */
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" className="retro-pointer-svg">
+                {/* Outer shadow / border */}
+                <path
+                  d="M0 0v17l4.5-4.5 4 8.5 3-1.4-4-8.6h5.5L0 0z"
+                  fill="#030712"
+                  stroke="#030712"
+                  strokeWidth="2"
+                  strokeLinejoin="bevel"
+                />
+                {/* Neon Cyan Blade */}
+                <path
+                  d="M1 1.5v13.5l3.5-3.5 4 8.5 1.5-.7-4-8.8H11L1 1.5z"
+                  fill="#38bdf8"
+                />
+                {/* Crisp White Inner Highlight */}
+                <path
+                  d="M2.5 3.5v9l2.5-2.5 3.5 7.5.6-.3-3.6-7.7H8L2.5 3.5z"
+                  fill="#ffffff"
+                  opacity="0.9"
+                />
+              </svg>
+            ) : (
+              /* Interactive Glowing Arcade Target Reticle */
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="retro-target-svg">
+                {/* 4 Corner Crosshairs */}
+                <rect x="2" y="12" width="6" height="4" fill="#f59e0b" rx="1" />
+                <rect x="20" y="12" width="6" height="4" fill="#f59e0b" rx="1" />
+                <rect x="12" y="2" width="4" height="6" fill="#f59e0b" rx="1" />
+                <rect x="12" y="20" width="4" height="6" fill="#f59e0b" rx="1" />
+                {/* Center Glowing Diamond Target */}
+                <rect
+                  x="11"
+                  y="11"
+                  width="6"
+                  height="6"
+                  fill="#fff"
+                  stroke="#f59e0b"
+                  strokeWidth="1.5"
+                  transform="rotate(45 14 14)"
+                />
+              </svg>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -387,62 +467,125 @@ const ParallaxBackground = ({ scrollYProgress }) => {
 };
 
 const SplashScreen = ({ setIsLoading }) => {
-  const loadingTexts = [
-    "Initializing environment...",
-    "Loading assets...",
-    "Preparing something awesome..."
+  const tips = [
+    "Write code you'll understand 6 months later.",
+    "Great UX is invisible. Bad UX is unforgettable.",
+    "Clean architecture beats clever hacks every time.",
+    "Simplicity is the soul of efficiency.",
+    "Make it work, make it right, make it fast."
   ];
-  const [textIndex, setTextIndex] = useState(0);
+
+  const [percent, setPercent] = useState(0);
+  const [tipIndex, setTipIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTextIndex((prev) => (prev < loadingTexts.length - 1 ? prev + 1 : prev));
-    }, 800);
-    return () => clearInterval(interval);
+    // Tip rotation
+    const tInterval = setInterval(() => {
+      setTipIndex(prev => (prev + 1) % tips.length);
+    }, 2400);
+
+    // Smooth loading progress (3.2 seconds total)
+    const duration = 3200;
+    const intervalTime = 32;
+    let current = 0;
+
+    const pInterval = setInterval(() => {
+      current += 1;
+      setPercent(current);
+      if (current >= 100) {
+        clearInterval(pInterval);
+      }
+    }, intervalTime);
+
+    return () => {
+      clearInterval(tInterval);
+      clearInterval(pInterval);
+    };
   }, []);
 
   return (
     <motion.div
-      className="splash-screen"
+      className="splash-screen indie-splash"
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
-      transition={{ duration: 0.8, delay: 2.8, ease: "easeInOut" }}
+      transition={{ duration: 0.8, delay: 3.6 }}
       onAnimationComplete={() => setIsLoading(false)}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-        <motion.div
-          className="splash-logo"
-          initial={{ opacity: 0, scale: 0.9, letterSpacing: "5px" }}
-          animate={{ opacity: 1, scale: 1, letterSpacing: "10px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          style={{ marginBottom: '10px' }}
-        >
-          AKASH V.
-        </motion.div>
-        
-        <AnimatePresence mode="wait">
-          <motion.div
-            style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', fontWeight: '500', letterSpacing: '1px' }}
-            key={textIndex}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
-            {loadingTexts[textIndex]}
-          </motion.div>
-        </AnimatePresence>
+      {/* Soft Ambient Aurora Backdrop */}
+      <div className="indie-bg-glow" />
 
+      {/* Main Center Content */}
+      <div className="indie-center">
+        {/* Minimalist Geometric Rune Emblem */}
         <motion.div
-          className="splash-progress"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 2.5, ease: "easeInOut" }}
-        />
+          className="indie-emblem"
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <div className="indie-emblem-diamond" />
+          <div className="indie-emblem-inner" />
+          <span className="indie-emblem-text">AV</span>
+        </motion.div>
+
+        {/* Clean Minimal Typography */}
+        <motion.div
+          className="indie-title-block"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <h1 className="indie-name">AKASH V.</h1>
+          <p className="indie-tagline">Portfolio &amp; Creative Works</p>
+        </motion.div>
+      </div>
+
+      {/* Bottom Indie Game Loading Area */}
+      <div className="indie-bottom">
+        {/* Rotating Game Tip */}
+        <div className="indie-tip-wrap">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={tipIndex}
+              className="indie-tip"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.4 }}
+            >
+              &ldquo;{tips[tipIndex]}&rdquo;
+            </motion.p>
+          </AnimatePresence>
+        </div>
+
+        {/* Sleek Minimal Progress Bar */}
+        <div className="indie-progress-box">
+          <div className="indie-progress-meta">
+            <span className="indie-status-label">
+              <span className="indie-dot-pulse" />
+              loading assets
+            </span>
+            <span className="indie-percent">{percent}%</span>
+          </div>
+
+          <div className="indie-bar-track">
+            <div
+              className="indie-bar-fill"
+              style={{ width: `${percent}%` }}
+            />
+          </div>
+        </div>
       </div>
     </motion.div>
   );
 };
+
+
+
+
+
+
+
 
 const TECH_STACK_DATA = [
   { name: 'React', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
@@ -544,7 +687,7 @@ const TimelineItem = ({ year, title, company, align, hoverImage }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springConfig = { damping: 25, stiffness: 300 };
+  const springConfig = { damping: 28, stiffness: 350 };
   const cursorXSpring = useSpring(x, springConfig);
   const cursorYSpring = useSpring(y, springConfig);
 
@@ -552,6 +695,8 @@ const TimelineItem = ({ year, title, company, align, hoverImage }) => {
     x.set(e.clientX);
     y.set(e.clientY);
   };
+
+  const isRightAligned = align === 'right';
 
   return (
     <motion.div
@@ -575,25 +720,44 @@ const TimelineItem = ({ year, title, company, align, hoverImage }) => {
       {hoverImage && (
         <AnimatePresence>
           {isHovered && (
-            <motion.img
-              src={hoverImage}
-              alt="Preview"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 8 }}
+              transition={{ duration: 0.2 }}
               style={{
                 position: 'fixed',
                 top: cursorYSpring,
                 left: cursorXSpring,
-                translateX: "10%", // offset from cursor slightly
+                translateX: isRightAligned ? "calc(-100% - 35px)" : "35px",
                 translateY: "-50%",
-                width: "500px",
-                borderRadius: "8px",
-                pointerEvents: "none",
-                zIndex: 9999,
-                boxShadow: "0 10px 40px rgba(0,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.1)"
+                pointerEvents: 'none',
+                zIndex: 1000000,
+                display: 'inline-block',
+                background: 'rgba(8, 12, 20, 0.96)',
+                border: '2px solid rgba(0, 240, 255, 0.4)',
+                borderRadius: '12px',
+                padding: '0',
+                overflow: 'hidden',
+                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 240, 255, 0.25)',
+                backdropFilter: 'blur(14px)',
+                width: 'max-content',
+                maxWidth: 'min(460px, 85vw)'
               }}
-            />
+            >
+              <img
+                src={hoverImage}
+                alt={title}
+                style={{
+                  width: '440px',
+                  maxWidth: 'min(440px, 85vw)',
+                  height: 'auto',
+                  maxHeight: '75vh',
+                  display: 'block',
+                  borderRadius: '10px'
+                }}
+              />
+            </motion.div>
           )}
         </AnimatePresence>
       )}
@@ -617,13 +781,13 @@ const GitHubStats = () => {
   return (
     <section className="section stats-section" style={{ padding: '4rem 0' }}>
       <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>GitHub <span className="text-gradient">Activity</span></h2>
-      <motion.div 
+      <motion.div
         className="github-calendar-container"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8 }}
-        style={{ 
+        style={{
           background: 'rgba(15, 23, 42, 0.4)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -635,50 +799,50 @@ const GitHubStats = () => {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
           margin: '0 auto'
         }}>
-          <GitHubCalendar 
-            username="BlxrryFxce17" 
-            colorScheme="dark"
-            theme={{
-              dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
-            }}
-            blockSize={isMobile ? 8 : 12}
-            blockMargin={isMobile ? 2 : 4}
-            fontSize={isMobile ? 10 : 14}
-            hideColorLegend={isMobile}
-            transformData={isMobile ? (data) => {
-              const now = new Date();
-              const cutoff = new Date(now.getFullYear(), now.getMonth() - 3, 1);
-              return data.filter(d => new Date(d.date) >= cutoff);
-            } : undefined}
-            style={{ margin: '0 auto', width: '100%' }}
-            renderBlock={(block, activity) => {
-              const dateObj = new Date(activity.date);
-              const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-              
-              return React.cloneElement(block, {
-                'data-tooltip-id': 'react-tooltip',
-                'data-tooltip-content': JSON.stringify({ count: activity.count, date: formattedDate }),
-              });
-            }}
-          />
-          <Tooltip 
-            id="react-tooltip" 
-            style={{ backgroundColor: '#1e293b', color: '#fff', borderRadius: '8px', padding: '6px 12px', fontSize: '14px', zIndex: 99999 }} 
-            render={({ content }) => {
-              if (!content) return null;
-              try {
-                const data = JSON.parse(content);
-                const countText = data.count === 0 ? 'No Commits' : `${data.count} contributions`;
-                return (
-                  <span>
-                    <strong>{countText}</strong> on {data.date}
-                  </span>
-                );
-              } catch (e) {
-                return content;
-              }
-            }}
-          />
+        <GitHubCalendar
+          username="BlxrryFxce17"
+          colorScheme="dark"
+          theme={{
+            dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
+          }}
+          blockSize={isMobile ? 8 : 12}
+          blockMargin={isMobile ? 2 : 4}
+          fontSize={isMobile ? 10 : 14}
+          hideColorLegend={isMobile}
+          transformData={isMobile ? (data) => {
+            const now = new Date();
+            const cutoff = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+            return data.filter(d => new Date(d.date) >= cutoff);
+          } : undefined}
+          style={{ margin: '0 auto', width: '100%' }}
+          renderBlock={(block, activity) => {
+            const dateObj = new Date(activity.date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            return React.cloneElement(block, {
+              'data-tooltip-id': 'react-tooltip',
+              'data-tooltip-content': JSON.stringify({ count: activity.count, date: formattedDate }),
+            });
+          }}
+        />
+        <Tooltip
+          id="react-tooltip"
+          style={{ backgroundColor: '#1e293b', color: '#fff', borderRadius: '8px', padding: '6px 12px', fontSize: '14px', zIndex: 99999 }}
+          render={({ content }) => {
+            if (!content) return null;
+            try {
+              const data = JSON.parse(content);
+              const countText = data.count === 0 ? 'No Commits' : `${data.count} contributions`;
+              return (
+                <span>
+                  <strong>{countText}</strong> on {data.date}
+                </span>
+              );
+            } catch (e) {
+              return content;
+            }
+          }}
+        />
       </motion.div>
     </section>
   );
@@ -719,18 +883,18 @@ const GlitchText = ({ original, as: Component = "span", className = "", style = 
   const [text, setText] = useState(original);
   const [isGlitching, setIsGlitching] = useState(false);
   const randomTimer = React.useRef(null);
-  
+
   const chars = "!<>-_\\\\/[]{}—=+*^?#________";
 
   const triggerGlitch = React.useCallback(() => {
     if (isGlitching) return;
-    
+
     if (type === "cssOnly") {
       setIsGlitching(true);
       setTimeout(() => setIsGlitching(false), 300);
       return;
     }
-    
+
     if (type === "scramble") {
       setIsGlitching(true);
       setText(original.split("").map(c => c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]).join(""));
@@ -743,15 +907,15 @@ const GlitchText = ({ original, as: Component = "span", className = "", style = 
     let iterations = 0;
     const interval = setInterval(() => {
       setText(original.split("").map((letter, index) => {
-        if(index < iterations) return original[index];
+        if (index < iterations) return original[index];
         return chars[Math.floor(Math.random() * chars.length)];
       }).join(""));
-      
-      if(iterations >= original.length) {
+
+      if (iterations >= original.length) {
         clearInterval(interval);
         setIsGlitching(false);
       }
-      iterations += 1/3;
+      iterations += 1 / 3;
     }, 50);
   }, [isGlitching, original, type]);
 
@@ -770,13 +934,13 @@ const GlitchText = ({ original, as: Component = "span", className = "", style = 
   const handleMouseEnter = () => {
     triggerGlitch();
   };
-  
+
   const handleMouseLeave = () => {
     if (!isGlitching) setText(original);
   };
 
   return (
-    <Component 
+    <Component
       className={`${className} ${isGlitching ? 'glitching' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -832,7 +996,7 @@ const Home = () => {
               >
                 I build <span className="text-neon-green">full-stack web apps</span>, <span className="text-vivid-orange">machine learning projects</span>, and <span className="text-hot-pink">mobile applications</span> with a focus on clean code and <span className="text-bright-yellow">performance</span>.
               </motion.p>
-              
+
               {/* Buttons positioned directly under the text */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -846,7 +1010,7 @@ const Home = () => {
             </div>
 
             {/* Right: Portrait Photo */}
-            <motion.div 
+            <motion.div
               className="hero-right-content"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -867,16 +1031,16 @@ const Home = () => {
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.113.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" /></svg>
                   </a>
                   <a href="https://www.linkedin.com/in/akashv10" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                   </a>
                   <a href="https://x.com/kai_zenn10" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="X (Twitter)">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
                   </a>
                   <a href="https://www.instagram.com/kai.zenn_10/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="Instagram">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                   </a>
                   <a href="https://www.reddit.com/user/Blxrry_Fxce_17/" target="_blank" rel="noreferrer" data-cursor="magnetic" aria-label="Reddit">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .466c.842.842 2.484.915 2.961.915.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 0-.466.336.336 0 0 0-.466 0c-.326.311-1.305.719-2.495.719-1.114 0-2.12-.352-2.496-.715a.333.333 0 0 0-.234-.1z"/></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .466c.842.842 2.484.915 2.961.915.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 0-.466.336.336 0 0 0-.466 0c-.326.311-1.305.719-2.495.719-1.114 0-2.12-.352-2.496-.715a.333.333 0 0 0-.234-.1z" /></svg>
                   </a>
                 </div>
               </div>
@@ -905,10 +1069,22 @@ const Home = () => {
               title="Full Stack Developer Intern"
               company="Techpath"
               align="left"
-              hoverImage="/certifications/TechPath.png"
+              hoverImage="/edu&exp/TechPath.png"
             />
-            <TimelineItem year="2024 - 2026" title="Master of Computer Applications (MCA)" company="St. Aloysius (Deemed to be University)" align="right" />
-            <TimelineItem year="2021 - 2024" title="Bachelor of Computer Applications (BCA)" company="Srinivas University" align="left" />
+            <TimelineItem
+              year="2024 - 2026"
+              title="Master of Computer Applications (MCA)"
+              company="St. Aloysius (Deemed to be University)"
+              align="right"
+              hoverImage="/edu&exp/MCA.jpeg"
+            />
+            <TimelineItem
+              year="2021 - 2024"
+              title="Bachelor of Computer Applications (BCA)"
+              company="Srinivas University"
+              align="left"
+              hoverImage="/edu&exp/BCA.jpeg"
+            />
           </div>
         </div>
       </section>
@@ -970,10 +1146,22 @@ const ExperiencePage = () => {
               title="Full Stack Developer Intern"
               company="Techpath"
               align="left"
-              hoverImage="/certifications/TechPath.png"
+              hoverImage="/edu&exp/TechPath.png"
             />
-            <TimelineItem year="2024 - 2026" title="Master of Computer Applications (MCA)" company="St. Aloysius (Deemed to be University)" align="right" />
-            <TimelineItem year="2021 - 2024" title="Bachelor of Computer Applications (BCA)" company="Srinivas University" align="left" />
+            <TimelineItem
+              year="2024 - 2026"
+              title="Master of Computer Applications (MCA)"
+              company="St. Aloysius (Deemed to be University)"
+              align="right"
+              hoverImage="/edu&exp/MCA.jpeg"
+            />
+            <TimelineItem
+              year="2021 - 2024"
+              title="Bachelor of Computer Applications (BCA)"
+              company="Srinivas University"
+              align="left"
+              hoverImage="/edu&exp/BCA.jpeg"
+            />
           </div>
         </div>
       </section>
@@ -1040,7 +1228,7 @@ const OverlayMenu = ({ isOpen, onClose }) => {
           <button className="overlay-close-btn" onClick={onClose} aria-label="Close menu">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
-          
+
           <div className="overlay-menu-content">
             <div className="overlay-menu-left">
               <nav className="overlay-nav-links">
@@ -1050,7 +1238,7 @@ const OverlayMenu = ({ isOpen, onClose }) => {
                 <Link to="/contact" onClick={onClose}><span>04</span> Contact</Link>
               </nav>
             </div>
-            
+
             <div className="overlay-menu-right">
               <div className="overlay-info-block">
                 <h4>SOCIALS</h4>
@@ -1058,13 +1246,13 @@ const OverlayMenu = ({ isOpen, onClose }) => {
                 <a href="https://github.com/BlxrryFxce17" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a href="https://wa.me/918904819430" target="_blank" rel="noopener noreferrer">WhatsApp</a>
               </div>
-              
+
               <div className="overlay-info-block">
                 <h4>GET IN TOUCH</h4>
                 <a href="mailto:akashvmsn@gmail.com">akashvmsn@gmail.com</a>
                 <p>WhatsApp: +91 89048 19430</p>
               </div>
-              
+
               <div className="overlay-info-block">
                 <h4>LOCATION</h4>
                 <p>Mangalore, India</p>
@@ -1099,7 +1287,7 @@ const FloatingShapes = () => {
         else if (typeRand > 0.55) type = 'square';
         else if (typeRand > 0.4) type = 'triangle';
         else if (typeRand > 0.25) type = 'dot';
-        
+
         const size = Math.random() * 80 + 20;
         return {
           type,
@@ -1138,17 +1326,17 @@ const FloatingShapes = () => {
           let dy = (s2.y + s2.radius) - (s1.y + s1.radius);
           let distance = Math.sqrt(dx * dx + dy * dy);
           let minDist = s1.radius + s2.radius;
-          
+
           if (distance < minDist && distance > 0.1) {
             // Gentle push apart
             let overlap = minDist - distance;
             let nx = dx / distance;
             let ny = dy / distance;
-            
+
             // Reduced repulsion force for calmer movement
             let pushX = nx * (overlap * 0.01);
             let pushY = ny * (overlap * 0.01);
-            
+
             s1.vx -= pushX;
             s1.vy -= pushY;
             s2.vx += pushX;
@@ -1202,11 +1390,11 @@ const FloatingShapes = () => {
           content = <div style={{ width: '100%', height: '100%', backgroundColor: `rgba(var(--shape-color, 255, 255, 255), ${s.opacity})` }} />;
         } else if (s.type === 'triangle') {
           content = (
-            <div style={{ 
-              width: 0, height: 0, 
-              borderLeft: `${s.size/2}px solid transparent`,
-              borderRight: `${s.size/2}px solid transparent`,
-              borderBottom: `${s.size}px solid rgba(var(--shape-color, 255, 255, 255), ${s.opacity})` 
+            <div style={{
+              width: 0, height: 0,
+              borderLeft: `${s.size / 2}px solid transparent`,
+              borderRight: `${s.size / 2}px solid transparent`,
+              borderBottom: `${s.size}px solid rgba(var(--shape-color, 255, 255, 255), ${s.opacity})`
             }} />
           );
         } else if (s.type === 'dot') {
@@ -1279,7 +1467,7 @@ function App() {
       "[+] Welcome to the dark side of the web, choom.\n" +
       "[+] Looks like you enjoy poking around under the hood.\n\n" +
       "%c>> Let's build something preem together.\n" +
-      ">> Ping me: %cakashvmsn@gmail.com", 
+      ">> Ping me: %cakashvmsn@gmail.com",
       "color: #a1a1aa; font-size: 12px;",
       "color: #00f0ff; font-weight: bold; text-shadow: 0 0 5px #00f0ff;",
       "color: #ff003c; font-size: 14px; font-weight: bold;",
@@ -1344,7 +1532,7 @@ function App() {
           transition={{ duration: 0.5 }}
         >
           <ParallaxBackground scrollYProgress={scrollYProgress} />
-          
+
           {/* Restored Standard Top Navbar */}
           <header className="saas-navbar">
             <div className="saas-logo">

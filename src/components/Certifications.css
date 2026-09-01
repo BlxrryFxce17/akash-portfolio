@@ -1,167 +1,1077 @@
+/* =========================================================
+   AUTHENTIC PHYSICAL RETRO ARCADE CABINET (DESKTOP & MOBILE)
+========================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .certifications-section {
-  padding: 8rem 5% 4rem;
-  background: #000;
+  padding: 5rem 1rem 4.5rem;
+  background: #03060c;
   position: relative;
   z-index: 10;
-}
-
-.cert-container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.cert-masonry {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 4rem;
-  align-items: center;
-}
-
-.cert-masonry-item {
-  position: relative;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  aspect-ratio: 1.414 / 1; /* Uniform landscape ratio */ /* Standard A4 landscape approx */
-}
-
-
-
-.cert-masonry-item:hover {
-  transform: translateY(-10px) scale(1.02);
-  z-index: 5;
-}
-
-.cert-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  overflow: hidden;
   width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  filter: blur(40px);
-  transition: all 0.4s ease;
-  z-index: 0;
+}
+
+.certifications-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 45%, rgba(245, 158, 11, 0.07) 0%, transparent 65%);
   pointer-events: none;
 }
 
-.cert-masonry-item:hover .cert-glow {
-  opacity: 0.6;
+.cert-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.cert-iframe-container {
-  position: relative;
+/* ── Section Title ── */
+.cert-page-title {
+  text-align: center;
+  margin-bottom: 2.2rem;
   width: 100%;
-  height: 100%;
-  border-radius: 12px;
+}
+
+.arcade-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  color: #f59e0b;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  border-radius: 999px;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+}
+
+.cert-page-desc {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  max-width: 580px;
+  margin: 0.4rem auto 0;
+  line-height: 1.5;
+}
+
+/* ── Main Layout ── */
+.arcade-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
+/* =========================================================
+   THE REAL PHYSICAL 3D ARCADE CABINET
+========================================================= */
+.arcade-cabinet-wrapper {
+  flex-shrink: 0;
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 auto;
+}
+
+/* Outer Cabinet Body with T-Molding Vinyl Profile */
+.arcade-cabinet {
+  width: 100%;
+  background: linear-gradient(180deg, #182844 0%, #0d1728 25%, #070d17 65%, #03060d 100%);
+  border: 3px solid #f59e0b;
+  border-radius: 20px 20px 8px 8px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    0 0 30px rgba(245, 158, 11, 0.25),
+    0 0 50px rgba(56, 189, 248, 0.12),
+    inset 0 2px 4px rgba(255, 255, 255, 0.25),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: #111;
+  position: relative;
+}
+
+/* Vibrant T-Molding Edge Glow on Sides */
+.cabinet-tmolding {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #f59e0b 0%, #fbbf24 30%, #f59e0b 70%, #d97706 100%);
+  box-shadow: 0 0 10px #f59e0b;
+  z-index: 20;
+}
+.tmolding-left { left: 0; }
+.tmolding-right { right: 0; }
+
+/* ── 1. Top Canopy Hood ── */
+.cab-canopy {
+  height: 16px;
+  background: linear-gradient(180deg, #243b5e 0%, #15243b 100%);
+  border-bottom: 2px solid #060b14;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canopy-top-edge {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.canopy-light-strip {
+  width: 75%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #38bdf8 40%, #f59e0b 60%, transparent);
+  box-shadow: 0 0 8px #38bdf8;
+  border-radius: 2px;
+}
+
+/* ── 2. Backlit Marquee Sign ── */
+.cab-marquee-box {
+  background: radial-gradient(ellipse at 50% 50%, #0e274d 0%, #061426 100%);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid #030812;
+  position: relative;
+  box-shadow:
+    inset 0 0 16px rgba(56, 189, 248, 0.4),
+    inset 0 0 30px rgba(245, 158, 11, 0.15);
+}
+
+.marquee-glass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
   z-index: 1;
 }
 
-.cert-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  pointer-events: none; /* Prevents scrolling inside the thumbnail */
+.marquee-neon-title {
+  font-family: 'Courier New', monospace;
+  font-size: 0.96rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #fbbf24;
+  text-shadow:
+    0 0 8px rgba(245, 158, 11, 0.9),
+    0 0 20px rgba(245, 158, 11, 0.6),
+    0 0 35px rgba(245, 158, 11, 0.3);
+  white-space: nowrap;
 }
 
-.cert-overlay {
+.marquee-neon-sub {
+  font-family: 'Courier New', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.12em;
+  color: #38bdf8;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.9);
+  margin-top: 1px;
+  white-space: nowrap;
+}
+
+.speaker-vents {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.speaker-vents span {
+  display: block;
+  width: 14px;
+  height: 2.5px;
+  background: #091729;
+  border-radius: 1px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* ── 3. Recessed CRT Monitor Chamber ── */
+.cab-monitor-hood {
+  padding: 8px 10px;
+  background: radial-gradient(circle at 50% 20%, #0f1c30 0%, #03060e 100%);
+  border-bottom: 4px solid #020408;
+  position: relative;
+}
+
+.crt-bezel-frame {
+  background: #060e1c;
+  border: 3px solid #14233c;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+.crt-glass-screen {
+  background: #010308;
+  border: 2px solid #091629;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    inset 0 0 35px rgba(0, 0, 0, 0.98),
+    inset 0 0 60px rgba(0, 25, 55, 0.4),
+    0 0 15px rgba(56, 189, 248, 0.1);
+}
+
+.crt-scanlines-layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-glare-layer {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38%;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* CRT HUD */
+.crt-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  font-family: 'Courier New', monospace;
+  font-size: 0.54rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 5;
+}
+
+.hud-badge {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.hud-issuer {
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+  flex: 1;
+  text-align: center;
+}
+
+.hud-year {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+/* Certificate Preview Screen Stage */
+.crt-stage {
+  padding: 6px;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+}
+
+.crt-cert-container {
+  background: rgba(6, 14, 28, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.crt-img-wrapper {
+  position: relative;
+  height: 155px;
+  background: #000;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.crt-cert-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.crt-stage:hover .crt-cert-img {
+  transform: scale(1.02);
+}
+
+.spin-flicker {
+  animation: slotFlicker 0.08s linear infinite alternate;
+}
+
+@keyframes slotFlicker {
+  from { filter: blur(4px) brightness(1.35); }
+  to { filter: blur(2px) brightness(0.8); }
+}
+
+.crt-hover-lens {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.crt-stage:hover .crt-hover-lens {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.crt-hover-lens span {
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  background: rgba(4, 12, 28, 0.94);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #38bdf8;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
-.cert-masonry-item:hover .cert-overlay {
+.crt-stage:hover .crt-hover-lens span {
   opacity: 1;
+  transform: translateY(0);
 }
 
-.cert-overlay-text {
-  padding: 0.8rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 99px;
+.crt-caption-bar {
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.8);
+  border-top: 1px solid rgba(56, 189, 248, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.caption-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.caption-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.52rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   ── 4. Angled Physical Control Panel Deck ──
+========================================================= */
+.cab-control-deck {
+  background: linear-gradient(170deg, #9caec4 0%, #687a91 35%, #465568 70%, #2f3b4a 100%);
+  padding: 8px 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 3px solid #0e1622;
+  box-shadow:
+    inset 0 3px 5px rgba(255, 255, 255, 0.3),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* 3D Joystick with Shadow & Metal Base */
+.deck-stick-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.joystick-base-plate {
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle at 35% 35%, #374151, #111827);
+  border-radius: 50%;
+  border: 2.5px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+}
+
+.joystick-metal-shaft {
+  width: 7px;
+  height: 20px;
+  background: linear-gradient(180deg, #d1d5db, #4b5563);
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.joystick-ball-head {
+  width: 13px;
+  height: 13px;
+  background: radial-gradient(circle at 35% 30%, #f87171, #ef4444 60%, #991b1b);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.8), inset 0 -2px 3px rgba(0, 0, 0, 0.5);
+  margin-top: -5px;
+}
+
+.deck-text-lbl {
+  font-family: 'Courier New', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+/* 4 Convex 3D Push Buttons */
+.deck-buttons-cluster {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.btns-row {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+
+.arcade-push-btn {
+  border: none;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
   color: #fff;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 0.42rem 0.2rem;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-width: 0;
+  position: relative;
 }
 
-/* Modal */
+.btn-inner {
+  display: block;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.arcade-push-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Button Colors */
+.btn-amber {
+  flex: 1;
+  background: radial-gradient(circle at 35% 25%, #fde68a, #f59e0b 60%, #b45309);
+  box-shadow: 0 3.5px 0 #78350f, 0 4px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid #fef3c7;
+}
+
+.btn-emerald {
+  flex: 1;
+  background: radial-gradient(circle at 35% 25%, #86efac, #10b981 60%, #047857);
+  box-shadow: 0 3.5px 0 #064e3b, 0 4px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid #d1fae5;
+}
+
+.btn-ruby {
+  flex: 1.5;
+  background: radial-gradient(circle at 35% 25%, #fca5a5, #ef4444 60%, #b91c1c);
+  box-shadow: 0 3.5px 0 #7f1d1d, 0 4px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid #fee2e2;
+}
+
+.btn-sapphire {
+  flex: 1;
+  background: radial-gradient(circle at 35% 25%, #93c5fd, #3b82f6 60%, #1d4ed8);
+  box-shadow: 0 3.5px 0 #1e3a8a, 0 4px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid #dbeafe;
+}
+
+.is-pressed {
+  transform: translateY(3px) !important;
+  box-shadow: 0 0.5px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ── 5. Cast-Metal Coin Door ── */
+.cab-coin-door-section {
+  padding: 7px 10px;
+  background: #050a14;
+  border-top: 1px solid #0c182c;
+}
+
+.coin-insert-panel {
+  background: linear-gradient(170deg, #d49826 0%, #ab7515 45%, #7a5009 100%);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.coin-insert-panel:hover {
+  filter: brightness(1.08);
+}
+
+.coin-insert-panel:active,
+.coin-drop-anim {
+  transform: scale(0.98);
+}
+
+.coin-slot-module {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #03070f;
+  border: 1.5px solid #162a45;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.coin-slit-metal {
+  width: 22px;
+  height: 4px;
+  background: #000;
+  border-radius: 2px;
+  border: 1px solid #1a3050;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.coin-reject-button {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.coin-cents {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.coin-action {
+  font-family: 'Courier New', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin-top: 1px;
+  white-space: nowrap;
+}
+
+.coin-return-tray {
+  background: #02050c;
+  border-radius: 3px;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid #0e1b2f;
+}
+
+.coin-return-tray span {
+  font-family: 'Courier New', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.14em;
+  color: #475569;
+}
+
+.cab-pedestal-feet {
+  height: 8px;
+  background: #020409;
+}
+
+.cabinet-desktop-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+}
+
+.cabinet-desktop-keys kbd {
+  background: #0d1929;
+  border: 1px solid #1e3a5f;
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: #94a3b8;
+}
+
+/* =========================================================
+   RIGHT: DIRECT CREDENTIAL DIRECTORY
+========================================================= */
+.credentials-directory {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.directory-card {
+  background: rgba(8, 15, 30, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 14px;
+  padding: 1.4rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+
+.directory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
+  gap: 8px;
+}
+
+.directory-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.directory-subtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0.2rem 0 0;
+}
+
+.directory-counter {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Category Filter Pills */
+.directory-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.1rem;
+  width: 100%;
+}
+
+.filter-pill {
+  background: rgba(12, 20, 36, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 6px;
+  color: #94a3b8;
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.32rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.filter-pill:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.filter-pill.is-active {
+  background: #38bdf8;
+  color: #030712;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+/* Directory List Items */
+.directory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 2px;
+  width: 100%;
+}
+
+.directory-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.directory-list::-webkit-scrollbar-thumb {
+  background: #1a2f4c;
+  border-radius: 4px;
+}
+
+.directory-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0.72rem 0.85rem;
+  background: rgba(10, 18, 34, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+}
+
+.directory-item:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.directory-item.is-selected {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.item-issuer-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 900;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+
+.item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.item-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.item-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-year {
+  font-family: 'Courier New', monospace;
+  font-size: 0.66rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.item-desc {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.item-view-btn {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 0.3rem 0.58rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item-view-btn:hover {
+  background: #38bdf8;
+  color: #020712;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
 .cert-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  z-index: 9999;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 0.8rem;
 }
 
-.cert-modal-content {
-  position: relative;
+.cert-modal-box {
+  background: #060e1d;
+  border: 1px solid #1a2f4c;
+  border-radius: 14px;
   width: 100%;
-  max-width: 1000px;
-  height: 85vh;
-  background: #111;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 880px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(56, 189, 248, 0.15);
 }
 
-.cert-modal-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.2rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid #1a2f4c;
+  gap: 8px;
 }
 
-.cert-modal-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 1.2rem;
+.modal-issuer {
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.modal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0.15rem 0 0;
+  line-height: 1.3;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.modal-open-link {
+  background: #142845;
+  border: 1px solid #244673;
+  border-radius: 5px;
+  color: #38bdf8;
+  font-family: 'Courier New', monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 0.32rem 0.7rem;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.modal-open-link:hover {
+  background: #1e3d6b;
+}
+
+.modal-close-btn {
+  background: none;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
 }
 
-.cert-modal-close:hover {
-  background: var(--hot-pink);
-  color: #fff;
-  transform: scale(1.1);
+.modal-close-btn:hover {
+  color: #ef4444;
+  border-color: #ef4444;
 }
 
-@media (max-width: 768px) {
-  .cert-modal-content {
-    height: 70vh;
+.modal-image-body {
+  flex: 1;
+  overflow: auto;
+  background: #01040a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (TABLETS & MOBILE)
+========================================================= */
+@media (max-width: 920px) {
+  .arcade-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .arcade-cabinet-wrapper {
+    width: 100%;
+    max-width: 330px;
+  }
+
+  .credentials-directory {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
   }
 }
 
+@media (max-width: 600px) {
+  .certifications-section {
+    padding: 3.5rem 0.6rem 3rem;
+  }
+
+  .arcade-cabinet-wrapper {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .arcade-cabinet {
+    border-width: 2.5px;
+  }
+
+  .crt-img-wrapper {
+    height: 145px;
+  }
+
+  .arcade-push-btn {
+    font-size: 0.56rem;
+    padding: 0.4rem 0.15rem;
+  }
+
+  .directory-card {
+    padding: 1rem;
+  }
+
+  .directory-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .filter-pill {
+    white-space: nowrap;
+    font-size: 0.62rem;
+    padding: 0.25rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .cabinet-desktop-keys {
+    display: none;
+  }
+}
+
+@media (max-width: 340px) {
+  .arcade-cabinet-wrapper {
+    max-width: 295px;
+  }
+
+  .crt-img-wrapper {
+    height: 130px;
+  }
+
+  .marquee-neon-title {
+    font-size: 0.82rem;
+  }
+}
